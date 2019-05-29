@@ -308,6 +308,7 @@
     <ClCompile Include="..\..\MKL\memory.c" />
     <ClCompile Include="..\..\MKL\vector_functions.c" />
     <ClCompile Include="..\..\MKL\fft.cpp" />
+    <ClCompile Include="convolution.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\MKL\resource.rc" />
@@ -317,6 +318,7 @@
     <ClInclude Include="..\..\MKL\blas.h" />
     <ClInclude Include="..\..\MKL\lapack.h" />
     <ClInclude Include="..\..\MKL\resource.h" />
+    <ClInclude Include="convolution.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -35,6 +35,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MathNet.Numerics.Providers.FourierTransform;
 using MathNet.Numerics.Providers.LinearAlgebra;
+using MathNet.Numerics.Providers.Convolution;
 
 namespace MathNet.Numerics
 {
@@ -70,12 +71,14 @@ namespace MathNet.Numerics
         {
             LinearAlgebraControl.UseManaged();
             FourierTransformControl.UseManaged();
+            ConvolutionControl.UseManaged();
         }
 
         public static void UseManagedReference()
         {
             LinearAlgebraControl.UseManagedReference();
             FourierTransformControl.UseManaged();
+            ConvolutionControl.UseManaged();
         }
 
         /// <summary>
@@ -86,6 +89,7 @@ namespace MathNet.Numerics
         {
             LinearAlgebraControl.UseDefault();
             FourierTransformControl.UseDefault();
+            ConvolutionControl.UseDefault();
         }
 
         /// <summary>
@@ -95,6 +99,7 @@ namespace MathNet.Numerics
         {
             LinearAlgebraControl.UseBest();
             FourierTransformControl.UseBest();
+            ConvolutionControl.UseBest();
         }
 
 #if NATIVE
@@ -107,6 +112,7 @@ namespace MathNet.Numerics
         {
             LinearAlgebraControl.UseNativeMKL();
             FourierTransformControl.UseNativeMKL();
+            ConvolutionControl.UseNativeMKL();
         }
 
         /// <summary>
@@ -121,6 +127,7 @@ namespace MathNet.Numerics
         {
             LinearAlgebraControl.UseNativeMKL(consistency, precision, accuracy);
             FourierTransformControl.UseNativeMKL();
+            ConvolutionControl.UseNativeMKL();
         }
 
         /// <summary>
@@ -134,7 +141,8 @@ namespace MathNet.Numerics
         {
             bool linearAlgebra = LinearAlgebraControl.TryUseNativeMKL();
             bool fourierTransform = FourierTransformControl.TryUseNativeMKL();
-            return linearAlgebra || fourierTransform;
+            bool convolution = ConvolutionControl.TryUseNativeMKL();
+            return linearAlgebra || fourierTransform || convolution;
         }
 
         /// <summary>
@@ -200,6 +208,7 @@ namespace MathNet.Numerics
         {
             LinearAlgebraControl.FreeResources();
             FourierTransformControl.FreeResources();
+            ConvolutionControl.FreeResources();
         }
 
         public static void UseSingleThread()
@@ -209,6 +218,7 @@ namespace MathNet.Numerics
 
             LinearAlgebraControl.Provider.InitializeVerify();
             FourierTransformControl.Provider.InitializeVerify();
+            ConvolutionControl.Provider.InitializeVerify();
         }
 
         public static void UseMultiThreading()
@@ -218,6 +228,7 @@ namespace MathNet.Numerics
 
             LinearAlgebraControl.Provider.InitializeVerify();
             FourierTransformControl.Provider.InitializeVerify();
+            ConvolutionControl.Provider.InitializeVerify();
         }
 
         /// <summary>
@@ -247,6 +258,7 @@ namespace MathNet.Numerics
                 _nativeProviderHintPath = value;
                 LinearAlgebraControl.HintPath = value;
                 FourierTransformControl.HintPath = value;
+                ConvolutionControl.HintPath = value;
             }
         }
 
@@ -265,6 +277,7 @@ namespace MathNet.Numerics
                 // Reinitialize providers:
                 LinearAlgebraControl.Provider.InitializeVerify();
                 FourierTransformControl.Provider.InitializeVerify();
+                ConvolutionControl.Provider.InitializeVerify();
             }
         }
 
