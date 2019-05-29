@@ -268,15 +268,17 @@ module Matrix =
     /// Fold one column.
     let inline foldCol f state (A: #Matrix<_>) k =
         let mutable acc = state
+        let ki : int = k
         for i=0 to A.RowCount-1 do
-            acc <- f acc (A.Item(i,k))
+            acc <- f acc (A.Item(i,ki))
         acc
 
     /// Fold one row.
     let inline foldRow f state (A: #Matrix<_>) k =
         let mutable acc = state
+        let ki : int = k
         for i=0 to A.ColumnCount-1 do
-            acc <- f acc (A.Item(k,i))
+            acc <- f acc (A.Item(ki,i))
         acc
 
     /// Fold a function over all matrix elements in reverse order.
