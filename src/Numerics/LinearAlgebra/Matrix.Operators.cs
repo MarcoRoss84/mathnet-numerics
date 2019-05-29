@@ -276,6 +276,24 @@ namespace MathNet.Numerics.LinearAlgebra
             return dividend.PointwiseRemainder(divisor);
         }
 
+        /// <summary>
+        /// Implicit conversion of a two-dimensional array into a matrix.
+        /// </summary>
+        /// <param name="array">Array that shall be converted.</param>
+        public static implicit operator Matrix<T>(T[,] array)
+        {
+            return Build.DenseOfArray(array);
+        }
+
+        /// <summary>
+        /// Implicit conversion of a scalar to a one-by-one matrix.
+        /// </summary>
+        /// <param name="scalar">Scalar that shall be converted.</param>
+        public static implicit operator Matrix<T>(T scalar)
+        {
+            return Build.DenseOfArray(new [,] { { scalar } });
+        }
+
         [SpecialName]
         public static Matrix<T> op_DotMultiply(Matrix<T> x, Matrix<T> y)
         {
