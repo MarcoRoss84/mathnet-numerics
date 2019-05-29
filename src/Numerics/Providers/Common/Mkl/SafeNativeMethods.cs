@@ -430,6 +430,22 @@ namespace MathNet.Numerics.Providers.Common.Mkl
 
         #endregion FFT
 
+        #region Convolution
+
+        [DllImport(_DllName, ExactSpelling = true, SetLastError = false, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern MklConvolutionStatus s_conv1d([In] float[] kernel, int kernelLength, [In] float[] x, int xLength, int firstX, [Out] float[] result, int resultLength);
+
+        [DllImport(_DllName, ExactSpelling = true, SetLastError = false, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern MklConvolutionStatus d_conv1d([In] double[] kernel, int kernelLength, [In] double[] x, int xLength, int firstX, [Out] double[] result, int resultLength);
+
+        [DllImport(_DllName, ExactSpelling = true, SetLastError = false, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern MklConvolutionStatus c_conv1d([In] Complex32[] kernel, int kernelLength, [In] Complex32[] x, int xLength, int firstX, [Out] Complex32[] result, int resultLength);
+
+        [DllImport(_DllName, ExactSpelling = true, SetLastError = false, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern MklConvolutionStatus z_conv1d([In] Complex[] kernel, int kernelLength, [In] Complex[] x, int xLength, int firstX, [Out] Complex[] result, int resultLength);
+
+
+        #endregion Convolution
         // ReSharper restore InconsistentNaming
     }
 }

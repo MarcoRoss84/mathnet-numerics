@@ -36,6 +36,9 @@
     <ClCompile Include="..\..\MKL\fft.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="convolution.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\MKL\resource.rc">
@@ -53,6 +56,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\MKL\blas.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="convolution.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

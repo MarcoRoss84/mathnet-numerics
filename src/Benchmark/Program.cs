@@ -16,6 +16,7 @@ namespace Benchmark
                         typeof(Transforms.FFT),
                         typeof(LinearAlgebra.DenseMatrixProduct),
                         typeof(LinearAlgebra.DenseVector),
+                        typeof(Convolutions.Convolution)
                     });
 
             switcher.Run(args);
