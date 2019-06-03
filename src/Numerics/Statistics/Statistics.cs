@@ -3,7 +3,7 @@
 // http://numerics.mathdotnet.com
 // http://github.com/mathnet/mathnet-numerics
 //
-// Copyright (c) 2009-2015 Math.NET
+// Copyright (c) 2009-2019 Math.NET
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -31,6 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Complex = System.Numerics.Complex;
+using MathNet.Numerics;
 
 namespace MathNet.Numerics.Statistics
 {
@@ -1538,5 +1539,111 @@ namespace MathNet.Numerics.Statistics
                 return movingStatistics.Mean;
             });
         }
+
+
+        /// <summary>
+        /// Calculates the probability densitiy function of a stream of values (<see cref="NormDistribution.NormPDF(double, double, double)"/>).
+        /// </summary>
+        /// <param name="samples">samples where the probability density function shall be evaluated</param>
+        /// <param name="mu">mean of the normal distribution (default: 0)</param>
+        /// <param name="sigma">standard deviation of the normal distribution (default: 1)</param>
+        public static IEnumerable<double> NormPDF(this IEnumerable<double> samples, double mu = 0, double sigma = 1)
+        {
+            foreach (var sample in samples)
+            {
+                yield return NormDistribution.NormPDF(sample, mu, sigma);
+            }
+        }
+
+        /// <summary>
+        /// Calculates the probability densitiy function of a stream of values (<see cref="NormDistribution.NormPDF(double, double, double)"/>).
+        /// </summary>
+        /// <param name="samples">samples where the probability density function shall be evaluated</param>
+        /// <param name="mu">mean of the normal distribution (default: 0)</param>
+        /// <param name="sigma">standard deviation of the normal distribution (default: 1)</param>
+        public static IEnumerable<float> NormPDF(this IEnumerable<float> samples, float mu = 0, float sigma = 1)
+        {
+            foreach (var sample in samples)
+            {
+                yield return (float)NormDistribution.NormPDF(sample, mu, sigma);
+            }
+        }
+
+        /// <summary>
+        /// Calculates the cumulative densitiy function of a stream of values (<see cref="NormDistribution.NormCDF(double, double, double)"/>).
+        /// </summary>
+        /// <param name="samples">samples where the cumulative density function shall be evaluated</param>
+        /// <param name="mu">mean of the normal distribution (default: 0)</param>
+        /// <param name="sigma">standard deviation of the normal distribution (default: 1)</param>
+        public static IEnumerable<double> NormCDF(this IEnumerable<double> samples, double mu = 0, double sigma = 1)
+        {
+            foreach (var sample in samples)
+            {
+                yield return NormDistribution.NormCDF(sample, mu, sigma);
+            }
+        }
+
+        /// <summary>
+        /// Calculates the cumulative densitiy function of a stream of values (<see cref="NormDistribution.NormCDF(double, double, double)"/>).
+        /// </summary>
+        /// <param name="samples">samples where the cumulative density function shall be evaluated</param>
+        /// <param name="mu">mean of the normal distribution (default: 0)</param>
+        /// <param name="sigma">standard deviation of the normal distribution (default: 1)</param>
+        public static IEnumerable<float> NormCDF(this IEnumerable<float> samples, float mu = 0, float sigma = 1)
+        {
+            foreach (var sample in samples)
+            {
+                yield return (float)NormDistribution.NormCDF(sample, mu, sigma);
+            }
+        }
+
+        /// <summary>
+        /// Calculates the error function of a stream of values (<see cref="SpecialFunctions.Erf(double)"/>)
+        /// </summary>
+        /// <param name="samples">Samples where the error function shall be evaluated</param>
+        public static IEnumerable<float> Erf(this IEnumerable<float> samples)
+        {
+            foreach (var sample in samples)
+            {
+                yield return (float)SpecialFunctions.Erf(sample);
+            }
+        }
+
+        /// <summary>
+        /// Calculates the error function of a stream of values (<see cref="SpecialFunctions.Erf(double)"/>)
+        /// </summary>
+        /// <param name="samples">Samples where the error function shall be evaluated</param>
+        public static IEnumerable<double> Erf(this IEnumerable<double> samples)
+        {
+            foreach (var sample in samples)
+            {
+                yield return SpecialFunctions.Erf(sample);
+            }
+        }
+
+        /// <summary>
+        /// Calculates the complementary error function of a stream of values (<see cref="SpecialFunctions.Erfc(double)"/>)
+        /// </summary>
+        /// <param name="samples">Samples where the complementary error function shall be evaluated</param>
+        public static IEnumerable<float> Erfc(this IEnumerable<float> samples)
+        {
+            foreach (var sample in samples)
+            {
+                yield return (float)SpecialFunctions.Erfc(sample);
+            }
+        }
+
+        /// <summary>
+        /// Calculates the complementary error function of a stream of values (<see cref="SpecialFunctions.Erfc(double)"/>)
+        /// </summary>
+        /// <param name="samples">Samples where the complementary error function shall be evaluated</param>
+        public static IEnumerable<double> Erfc(this IEnumerable<double> samples)
+        {
+            foreach (var sample in samples)
+            {
+                yield return SpecialFunctions.Erfc(sample);
+            }
+        }
+
     }
 }
