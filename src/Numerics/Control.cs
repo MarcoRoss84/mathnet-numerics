@@ -3,7 +3,7 @@
 // http://numerics.mathdotnet.com
 // http://github.com/mathnet/mathnet-numerics
 //
-// Copyright (c) 2009-2018 Math.NET
+// Copyright (c) 2009-2019 Math.NET
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -35,6 +35,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MathNet.Numerics.Providers.FourierTransform;
 using MathNet.Numerics.Providers.LinearAlgebra;
+using MathNet.Numerics.Providers.DigitalFilter;
 
 namespace MathNet.Numerics
 {
@@ -70,12 +71,14 @@ namespace MathNet.Numerics
         {
             LinearAlgebraControl.UseManaged();
             FourierTransformControl.UseManaged();
+            DigitalFilterControl.UseManaged();
         }
 
         public static void UseManagedReference()
         {
             LinearAlgebraControl.UseManagedReference();
             FourierTransformControl.UseManaged();
+            DigitalFilterControl.UseManaged();
         }
 
         /// <summary>
@@ -86,6 +89,7 @@ namespace MathNet.Numerics
         {
             LinearAlgebraControl.UseDefault();
             FourierTransformControl.UseDefault();
+            DigitalFilterControl.UseDefault();
         }
 
         /// <summary>
@@ -95,6 +99,7 @@ namespace MathNet.Numerics
         {
             LinearAlgebraControl.UseBest();
             FourierTransformControl.UseBest();
+            DigitalFilterControl.UseBest();
         }
 
 #if NATIVE
@@ -107,6 +112,7 @@ namespace MathNet.Numerics
         {
             LinearAlgebraControl.UseNativeMKL();
             FourierTransformControl.UseNativeMKL();
+            DigitalFilterControl.UseNativeMKL();
         }
 
         /// <summary>
@@ -121,6 +127,7 @@ namespace MathNet.Numerics
         {
             LinearAlgebraControl.UseNativeMKL(consistency, precision, accuracy);
             FourierTransformControl.UseNativeMKL();
+            DigitalFilterControl.UseNativeMKL(consistency, precision, accuracy);
         }
 
         /// <summary>
@@ -134,7 +141,8 @@ namespace MathNet.Numerics
         {
             bool linearAlgebra = LinearAlgebraControl.TryUseNativeMKL();
             bool fourierTransform = FourierTransformControl.TryUseNativeMKL();
-            return linearAlgebra || fourierTransform;
+            bool digitalFilters = DigitalFilterControl.TryUseNativeMKL();
+            return linearAlgebra || fourierTransform || digitalFilters;
         }
 
         /// <summary>
@@ -192,7 +200,8 @@ namespace MathNet.Numerics
         {
             bool linearAlgebra = LinearAlgebraControl.TryUseNative();
             bool fourierTransform = FourierTransformControl.TryUseNative();
-            return linearAlgebra || fourierTransform;
+            bool digitalFilters = DigitalFilterControl.TryUseNative();
+            return linearAlgebra || fourierTransform || digitalFilters;
         }
 #endif
 
@@ -200,6 +209,7 @@ namespace MathNet.Numerics
         {
             LinearAlgebraControl.FreeResources();
             FourierTransformControl.FreeResources();
+            DigitalFilterControl.FreeResources();
         }
 
         public static void UseSingleThread()
@@ -209,6 +219,7 @@ namespace MathNet.Numerics
 
             LinearAlgebraControl.Provider.InitializeVerify();
             FourierTransformControl.Provider.InitializeVerify();
+            DigitalFilterControl.Provider.InitializeVerify();
         }
 
         public static void UseMultiThreading()
@@ -218,6 +229,7 @@ namespace MathNet.Numerics
 
             LinearAlgebraControl.Provider.InitializeVerify();
             FourierTransformControl.Provider.InitializeVerify();
+            DigitalFilterControl.Provider.InitializeVerify();
         }
 
         /// <summary>
@@ -247,6 +259,7 @@ namespace MathNet.Numerics
                 _nativeProviderHintPath = value;
                 LinearAlgebraControl.HintPath = value;
                 FourierTransformControl.HintPath = value;
+                DigitalFilterControl.HintPath = value;
             }
         }
 
@@ -265,6 +278,7 @@ namespace MathNet.Numerics
                 // Reinitialize providers:
                 LinearAlgebraControl.Provider.InitializeVerify();
                 FourierTransformControl.Provider.InitializeVerify();
+                DigitalFilterControl.Provider.InitializeVerify();
             }
         }
 
