@@ -33,19 +33,19 @@ open BuildFramework
 
 // VERSION OVERVIEW
 
-let numericsRelease = release "Math.NET Numerics" "RELEASENOTES.md"
-let mklRelease = release "MKL Provider" "RELEASENOTES-MKL.md"
-let cudaRelease = release "CUDA Provider" "RELEASENOTES-CUDA.md"
-let openBlasRelease = release "OpenBLAS Provider" "RELEASENOTES-OpenBLAS.md"
-let dataRelease = release "Data Extensions" "RELEASENOTES-Data.md"
+let numericsRelease = release "numerics" "Math.NET Numerics" "RELEASENOTES.md"
+let mklRelease = release "numerics" "MKL Provider" "RELEASENOTES-MKL.md"
+let cudaRelease = release "numerics" "CUDA Provider" "RELEASENOTES-CUDA.md"
+let openBlasRelease = release "numerics" "OpenBLAS Provider" "RELEASENOTES-OpenBLAS.md"
+let dataRelease = release "numerics" "Data Extensions" "RELEASENOTES-Data.md"
 let releases = [ numericsRelease; mklRelease; openBlasRelease; dataRelease ] // skip cuda
 traceHeader releases
 
 
 // NUMERICS PACKAGES
 
-let numericsZipPackage = zipPackage "MathNet.Numerics" "Math.NET Numerics" numericsRelease true
-let numericsStrongNameZipPackage = zipPackage "MathNet.Numerics.Signed" "Math.NET Numerics" numericsRelease true
+let numericsZipPackage = zipPackage "MathNet.Numerics" "Math.NET Numerics" numericsRelease
+let numericsStrongNameZipPackage = zipPackage "MathNet.Numerics.Signed" "Math.NET Numerics" numericsRelease
 
 let numericsNuGetPackage = nugetPackage "MathNet.Numerics" numericsRelease
 let numericsFSharpNuGetPackage = nugetPackage "MathNet.Numerics.FSharp" numericsRelease
@@ -59,8 +59,8 @@ let numericsSolution = solution "Numerics" "MathNet.Numerics.sln" [numericsProje
 
 // DATA EXTENSION PACKAGES
 
-let dataZipPackage = zipPackage "MathNet.Numerics.Data" "Math.NET Numerics Data Extensions" dataRelease false
-let dataStrongNameZipPackage = zipPackage "MathNet.Numerics.Data.Signed" "Math.NET Numerics Data Extensions" dataRelease false
+let dataZipPackage = zipPackage "MathNet.Numerics.Data" "Math.NET Numerics Data Extensions" dataRelease
+let dataStrongNameZipPackage = zipPackage "MathNet.Numerics.Data.Signed" "Math.NET Numerics Data Extensions" dataRelease
 
 let dataTextNuGetPackage = nugetPackage "MathNet.Numerics.Data.Text" dataRelease
 let dataMatlabNuGetPackage = nugetPackage "MathNet.Numerics.Data.Matlab" dataRelease
@@ -74,8 +74,8 @@ let dataSolution = solution "Data" "MathNet.Numerics.Data.sln" [dataTextProject;
 
 // MKL NATIVE PROVIDER PACKAGES
 
-let mklWinZipPackage = zipPackage "MathNet.Numerics.MKL.Win" "Math.NET Numerics MKL Native Provider for Windows" mklRelease false
-let mklLinuxZipPackage = zipPackage "MathNet.Numerics.MKL.Linux" "Math.NET Numerics MKL Native Provider for Linux" mklRelease false
+let mklWinZipPackage = zipPackage "MathNet.Numerics.MKL.Win" "Math.NET Numerics MKL Native Provider for Windows" mklRelease
+let mklLinuxZipPackage = zipPackage "MathNet.Numerics.MKL.Linux" "Math.NET Numerics MKL Native Provider for Linux" mklRelease
 
 let mklWinNuGetPackage = nugetPackage "MathNet.Numerics.MKL.Win" mklRelease
 let mklWin32NuGetPackage = nugetPackage "MathNet.Numerics.MKL.Win-x86" mklRelease
@@ -121,7 +121,7 @@ let mklLinux64Pack =
 
 // CUDA NATIVE PROVIDER PACKAGES
 
-let cudaWinZipPackage = zipPackage "MathNet.Numerics.CUDA.Win" "Math.NET Numerics CUDA Native Provider for Windows" cudaRelease false
+let cudaWinZipPackage = zipPackage "MathNet.Numerics.CUDA.Win" "Math.NET Numerics CUDA Native Provider for Windows" cudaRelease
 let cudaWinNuGetPackage = nugetPackage "MathNet.Numerics.CUDA.Win" cudaRelease
 
 let cudaWinProject = nativeProject "MathNet.Numerics.CUDA" "src/NativeProviders/Windows/CUDA/CUDAWrapper.vcxproj" [cudaWinNuGetPackage]
@@ -135,7 +135,7 @@ let cudaWinPack =
 
 // OpenBLAS NATIVE PROVIDER PACKAGES
 
-let openBlasWinZipPackage = zipPackage "MathNet.Numerics.OpenBLAS.Win" "Math.NET Numerics OpenBLAS Native Provider for Windows" openBlasRelease false
+let openBlasWinZipPackage = zipPackage "MathNet.Numerics.OpenBLAS.Win" "Math.NET Numerics OpenBLAS Native Provider for Windows" openBlasRelease
 let openBlasWinNuGetPackage = nugetPackage "MathNet.Numerics.OpenBLAS.Win" openBlasRelease
 
 let openBlasWinProject = nativeProject "MathNet.Numerics.OpenBLAS" "src/NativeProviders/Windows/OpenBLAS/OpenBLASWrapper.vcxproj" [openBlasWinNuGetPackage]
@@ -177,7 +177,7 @@ Target "ApplyVersion" (fun _ ->
     patchVersionInResource "src/NativeProviders/CUDA/resource.rc" cudaRelease
     patchVersionInResource "src/NativeProviders/OpenBLAS/resource.rc" openBlasRelease)
 
-Target "Restore" (fun _ -> allSolutions |> List.iter restore)
+Target "Restore" (fun _ -> allSolutions |> List.iter restoreWeak)
 "Start"
   =?> ("Clean", not (hasBuildParam "incremental"))
   ==> "Restore"
@@ -201,24 +201,24 @@ Target "Build" (fun _ ->
     // Strong Name Build (with strong name, without certificate signature)
     if hasBuildParam "strongname" then
         CleanDirs (!! "src/**/obj/" ++ "src/**/bin/" )
-        restoreSN numericsSolution
-        buildSN numericsSolution
+        restoreStrong numericsSolution
+        buildStrong numericsSolution
         if isWindows && hasBuildParam "sign" then sign fingerprint timeserver numericsSolution
         collectBinariesSN numericsSolution
         zip numericsStrongNameZipPackage numericsSolution.OutputZipDir numericsSolution.OutputLibStrongNameDir (fun f -> f.Contains("MathNet.Numerics.") || f.Contains("System.Threading.") || f.Contains("FSharp.Core."))
         if isWindows then
-            packSN numericsSolution
+            packStrong numericsSolution
             collectNuGetPackages numericsSolution
 
     // Normal Build (without strong name, with certificate signature)
     CleanDirs (!! "src/**/obj/" ++ "src/**/bin/" )
-    restore numericsSolution
-    build numericsSolution
+    restoreWeak numericsSolution
+    buildWeak numericsSolution
     if isWindows && hasBuildParam "sign" then sign fingerprint timeserver numericsSolution
     collectBinaries numericsSolution
     zip numericsZipPackage numericsSolution.OutputZipDir numericsSolution.OutputLibDir (fun f -> f.Contains("MathNet.Numerics.") || f.Contains("System.Threading.") || f.Contains("FSharp.Core."))
     if isWindows then
-        pack numericsSolution
+        packWeak numericsSolution
         collectNuGetPackages numericsSolution
 
     // NuGet Sign (all or nothing)
@@ -232,26 +232,26 @@ Target "DataBuild" (fun _ ->
     // Strong Name Build (with strong name, without certificate signature)
     if hasBuildParam "strongname" then
         CleanDirs (!! "src/**/obj/" ++ "src/**/bin/" )
-        restoreSN dataSolution
-        buildSN dataSolution
+        restoreStrong dataSolution
+        buildStrong dataSolution
         if isWindows && hasBuildParam "sign" then sign fingerprint timeserver dataSolution
         collectBinariesSN dataSolution
         zip dataStrongNameZipPackage dataSolution.OutputZipDir dataSolution.OutputLibStrongNameDir (fun f -> f.Contains("MathNet.Numerics.Data."))
         if isWindows then
-            packProjectSN dataTextProject
-            packProjectSN dataMatlabProject
+            packProjectStrong dataTextProject
+            packProjectStrong dataMatlabProject
             collectNuGetPackages dataSolution
 
     // Normal Build (without strong name, with certificate signature)
     CleanDirs (!! "src/**/obj/" ++ "src/**/bin/" )
-    restore dataSolution
-    build dataSolution
+    restoreWeak dataSolution
+    buildWeak dataSolution
     if isWindows && hasBuildParam "sign" then sign fingerprint timeserver dataSolution
     collectBinaries dataSolution
     zip dataZipPackage dataSolution.OutputZipDir dataSolution.OutputLibDir (fun f -> f.Contains("MathNet.Numerics.Data."))
     if isWindows then
-        packProject dataTextProject
-        packProject dataMatlabProject
+        packProjectWeak dataTextProject
+        packProjectWeak dataMatlabProject
         collectNuGetPackages dataSolution
 
     // NuGet Sign (all or nothing)
@@ -262,7 +262,7 @@ Target "DataBuild" (fun _ ->
 
 Target "MklWinBuild" (fun _ ->
 
-    restore mklSolution
+    restoreWeak mklSolution
     buildConfig32 "Release-MKL" !! "MathNet.Numerics.MKL.sln"
     buildConfig64 "Release-MKL" !! "MathNet.Numerics.MKL.sln"
     CreateDir mklSolution.OutputZipDir
@@ -278,7 +278,7 @@ Target "MklWinBuild" (fun _ ->
 
 Target "CudaWinBuild" (fun _ ->
 
-    restore cudaSolution
+    restoreWeak cudaSolution
     buildConfig64 "Release-CUDA" !! "MathNet.Numerics.CUDA.sln"
     CreateDir cudaSolution.OutputZipDir
     zip cudaWinZipPackage cudaSolution.OutputZipDir "out/CUDA/Windows" (fun f -> f.Contains("MathNet.Numerics.CUDA.") || f.Contains("cublas") || f.Contains("cudart") || f.Contains("cusolver"))
@@ -293,7 +293,7 @@ Target "CudaWinBuild" (fun _ ->
 
 Target "OpenBlasWinBuild" (fun _ ->
 
-    restore openBlasSolution
+    restoreWeak openBlasSolution
     buildConfig32 "Release-OpenBLAS" !! "MathNet.Numerics.OpenBLAS.sln"
     buildConfig64 "Release-OpenBLAS" !! "MathNet.Numerics.OpenBLAS.sln"
     CreateDir openBlasSolution.OutputZipDir
@@ -451,7 +451,6 @@ Target "MklPublishTag" (fun _ -> publishReleaseTag "Math.NET Numerics MKL Provid
 Target "CudaPublishTag" (fun _ -> publishReleaseTag "Math.NET Numerics CUDA Provider" "cuda-" cudaRelease)
 Target "OpenBlasPublishTag" (fun _ -> publishReleaseTag "Math.NET Numerics OpenBLAS Provider" "openblas-" openBlasRelease)
 
-Target "PublishMirrors" (fun _ -> publishMirrors ())
 Target "PublishDocs" (fun _ -> publishDocs numericsRelease)
 Target "PublishApi" (fun _ -> publishApi numericsRelease)
 
