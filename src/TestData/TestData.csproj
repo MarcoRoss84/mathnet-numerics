@@ -274,6 +274,9 @@
         <EmbeddedResource Include="..\..\data\MatrixMarket\random_real_general_dense_10_20.tab">
             <Link>Data\MatrixMarket\random_real_general_dense_10_20.tab</Link>
         </EmbeddedResource>
+        <EmbeddedResource Include="..\..\data\hdf\testData.h5">
+            <Link>Data\hdf\testData.h5</Link>
+        </EmbeddedResource>
     </ItemGroup>
     <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
