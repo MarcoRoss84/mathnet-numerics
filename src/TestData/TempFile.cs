@@ -1,9 +1,6 @@
 ﻿#if NET40
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace MathNet.Numerics.TestData
 {
