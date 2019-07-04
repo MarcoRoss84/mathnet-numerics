@@ -87,12 +87,32 @@ namespace MathNet.Numerics.Providers.Convolution.Mkl
             SafeNativeMethods.z_conv1d(kernel, kernel.Length, x, x.Length, xOffset, y, length);
         }
 
+        public void Conv2D(float[,] kernel, float[,] x, Tuple<int, int> xOffset, float[,] y, Tuple<int, int> targetShape)
+        {
+            SafeNativeMethods.s_conv2d(kernel, kernel.GetLength(0), kernel.GetLength(1), x, x.GetLength(0), x.GetLength(1), xOffset.Item1, xOffset.Item2, y, targetShape.Item1, targetShape.Item2);
+        }
         
+        public void Conv2D(double[,] kernel, double[,] x, Tuple<int, int> xOffset, double[,] y, Tuple<int, int> targetShape)
+        {
+            SafeNativeMethods.d_conv2d(kernel, kernel.GetLength(0), kernel.GetLength(1), x, x.GetLength(0), x.GetLength(1), xOffset.Item1, xOffset.Item2, y, targetShape.Item1, targetShape.Item2);
+        }
+
+        public void Conv2D(Complex[,] kernel, Complex[,] x, Tuple<int, int> xOffset, Complex[,] y, Tuple<int, int> targetShape)
+        {
+            SafeNativeMethods.z_conv2d(kernel, kernel.GetLength(0), kernel.GetLength(1), x, x.GetLength(0), x.GetLength(1), xOffset.Item1, xOffset.Item2, y, targetShape.Item1, targetShape.Item2);
+        }
+
+        public void Conv2D(Complex32[,] kernel, Complex32[,] x, Tuple<int, int> xOffset, Complex32[,] y, Tuple<int, int> targetShape)
+        {
+            SafeNativeMethods.c_conv2d(kernel, kernel.GetLength(0), kernel.GetLength(1), x, x.GetLength(0), x.GetLength(1), xOffset.Item1, xOffset.Item2, y, targetShape.Item1, targetShape.Item2);
+        }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            FreeResources();
         }
+
+        
     }
 
 #endif

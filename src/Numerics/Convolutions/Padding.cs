@@ -11,4 +11,10 @@ namespace MathNet.Numerics.Convolutions
         Same,
         Causal
     }
+
+    public enum Padding2D
+    {
+        Valid,
+        Same
+    }
 }
