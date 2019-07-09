@@ -69,7 +69,7 @@ namespace MathNet.Numerics.Convolutions
         {
             var expectedShape = GetExpectedResultShape(x, kernel, padding);
             var actualShape = new Tuple<int, int>(y.GetLength(0), y.GetLength(1));
-            if (actualShape != expectedShape)
+            if (!actualShape.Equals(expectedShape))
             {
                 throw new ArgumentException("Invalid size of target array, expected " + expectedShape + ", but was " + actualShape);
             }
