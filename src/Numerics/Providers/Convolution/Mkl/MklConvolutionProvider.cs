@@ -112,7 +112,6 @@ namespace MathNet.Numerics.Providers.Convolution.Mkl
             FreeResources();
         }
 
-        
     }
 
 #endif

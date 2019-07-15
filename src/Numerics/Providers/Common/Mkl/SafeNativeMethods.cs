@@ -456,7 +456,6 @@ namespace MathNet.Numerics.Providers.Common.Mkl
         [DllImport(_DllName, ExactSpelling = true, SetLastError = false, CallingConvention = CallingConvention.Cdecl)]
         internal static extern MklConvolutionStatus z_conv2d([In] Complex[,] kernel, int kernelLength1, int kernelLength2, [In] Complex[,] x, int xLength1, int xLength2, int firstX1, int firstX2, [Out] Complex[,] result, int resultLength1, int resultLength2);
 
-
         #endregion Convolution
         // ReSharper restore InconsistentNaming
     }

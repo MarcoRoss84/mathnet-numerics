@@ -3,7 +3,7 @@
 // http://numerics.mathdotnet.com
 // http://github.com/mathnet/mathnet-numerics
 //
-// Copyright (c) 2009-2015 Math.NET
+// Copyright (c) 2009-2019 Math.NET
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -28,6 +28,7 @@
 // </copyright>
 
 using System;
+using MathNet.Numerics.LinearAlgebra.Logical;
 using MathNet.Numerics.LinearAlgebra.Storage;
 using MathNet.Numerics.Threading;
 
@@ -636,5 +637,66 @@ namespace MathNet.Numerics.LinearAlgebra.Double
 
             return clone;
         }
+
+        public static LogicalVector operator >(Vector v1, Vector v2)
+        {
+            return Generate.Map2(v1.AsArray() ?? v1.ToArray(), v2.AsArray() ?? v2.ToArray(), (s1, s2) => s1 > s2);
+        }
+
+        public static LogicalVector operator >(Vector v, float scalar)
+        {
+            return Generate.Map(v.AsArray() ?? v.ToArray(), (s) => s > scalar);
+        }
+
+        public static LogicalVector operator >(float scalar, Vector v)
+        {
+            return Generate.Map(v.AsArray() ?? v.ToArray(), (s) => s < scalar);
+        }
+
+        public static LogicalVector operator <(Vector v1, Vector v2)
+        {
+            return Generate.Map2(v1.AsArray() ?? v1.ToArray(), v2.AsArray() ?? v2.ToArray(), (s1, s2) => s1 < s2);
+        }
+
+        public static LogicalVector operator <(Vector v, float scalar)
+        {
+            return Generate.Map(v.AsArray() ?? v.ToArray(), (s) => s < scalar);
+        }
+
+        public static LogicalVector operator <(float scalar, Vector v)
+        {
+            return Generate.Map(v.AsArray() ?? v.ToArray(), (s) => s > scalar);
+        }
+
+        public static LogicalVector operator >=(Vector v1, Vector v2)
+        {
+            return Generate.Map2(v1.AsArray() ?? v1.ToArray(), v2.AsArray() ?? v2.ToArray(), (s1, s2) => s1 >= s2);
+        }
+
+        public static LogicalVector operator >=(Vector v, float scalar)
+        {
+            return Generate.Map(v.AsArray() ?? v.ToArray(), (s) => s >= scalar);
+        }
+
+        public static LogicalVector operator >=(float scalar, Vector v)
+        {
+            return Generate.Map(v.AsArray() ?? v.ToArray(), (s) => s <= scalar);
+        }
+
+        public static LogicalVector operator <=(Vector v1, Vector v2)
+        {
+            return Generate.Map2(v1.AsArray() ?? v1.ToArray(), v2.AsArray() ?? v2.ToArray(), (s1, s2) => s1 <= s2);
+        }
+
+        public static LogicalVector operator <=(Vector v, float scalar)
+        {
+            return Generate.Map(v.AsArray() ?? v.ToArray(), (s) => s <= scalar);
+        }
+
+        public static LogicalVector operator <=(float scalar, Vector v)
+        {
+            return Generate.Map(v.AsArray() ?? v.ToArray(), (s) => s >= scalar);
+        }
+
     }
 }
