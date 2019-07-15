@@ -27,6 +27,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 // </copyright>
 
+using System;
 using Complex = System.Numerics.Complex;
 
 namespace MathNet.Numerics.Providers.Convolution
@@ -41,6 +42,7 @@ namespace MathNet.Numerics.Providers.Convolution
     public interface IConvolutionProvider<T>
     {
         void Conv1D(T[] kernel, T[] x, int xOffset, T[] y, int yOffset, int length);
+        void Conv2D(T[,] kernel, T[,] x, Tuple<int, int> xOffset, T[,] y, Tuple<int, int> actualShape);
     }
 
 }

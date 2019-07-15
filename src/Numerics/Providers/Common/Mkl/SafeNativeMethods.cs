@@ -444,6 +444,17 @@ namespace MathNet.Numerics.Providers.Common.Mkl
         [DllImport(_DllName, ExactSpelling = true, SetLastError = false, CallingConvention = CallingConvention.Cdecl)]
         internal static extern MklConvolutionStatus z_conv1d([In] Complex[] kernel, int kernelLength, [In] Complex[] x, int xLength, int firstX, [Out] Complex[] result, int resultLength);
 
+        [DllImport(_DllName, ExactSpelling = true, SetLastError = false, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern MklConvolutionStatus s_conv2d([In] float[,] kernel, int kernelLength1, int kernelLength2, [In] float[,] x, int xLength1, int xLength2, int firstX1, int firstX2, [Out] float[,] result, int resultLength1, int resultLength2);
+
+        [DllImport(_DllName, ExactSpelling = true, SetLastError = false, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern MklConvolutionStatus d_conv2d([In] double[,] kernel, int kernelLength1, int kernelLength2, [In] double[,] x, int xLength1, int xLength2, int firstX1, int firstX2, [Out] double[,] result, int resultLength1, int resultLength2);
+
+        [DllImport(_DllName, ExactSpelling = true, SetLastError = false, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern MklConvolutionStatus c_conv2d([In] Complex32[,] kernel, int kernelLength1, int kernelLength2, [In] Complex32[,] x, int xLength1, int xLength2, int firstX1, int firstX2, [Out] Complex32[,] result, int resultLength1, int resultLength2);
+
+        [DllImport(_DllName, ExactSpelling = true, SetLastError = false, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern MklConvolutionStatus z_conv2d([In] Complex[,] kernel, int kernelLength1, int kernelLength2, [In] Complex[,] x, int xLength1, int xLength2, int firstX1, int firstX2, [Out] Complex[,] result, int resultLength1, int resultLength2);
 
         #endregion Convolution
         // ReSharper restore InconsistentNaming

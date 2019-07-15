@@ -50,6 +50,11 @@ namespace MathNet.Numerics.Convolutions
 
         public static void Conv1D(<#= type #>[] kernel, <#= type #>[] x, <#= type #>[] y, Padding padding = Padding.Valid)
         {
+            var expectedLen = GetExpectedResultLength(kernel.Length, x.Length, padding);
+            if (y.Length != expectedLen)
+            {
+                throw new ArgumentException("Invalid size of target array, expected " + expectedLen + ", but was " + y.Length);
+            }
             ConvolutionControl.Provider.Conv1D(kernel, x, GetXOffset(kernel.Length, padding), y, 0, y.Length);
         }
 
@@ -57,6 +62,26 @@ namespace MathNet.Numerics.Convolutions
         {
             var y = new <#= type #>[GetExpectedResultLength(kernel.Length, x.Length, padding)];
             Conv1D(kernel, x, y, padding);
+            return y;
+        }
+
+        public static void Conv2D(<#= type #>[,] kernel, <#= type #>[,] x, <#= type #>[,] y, Padding2D padding = Padding2D.Valid)
+        {
+            var expectedShape = GetExpectedResultShape(x, kernel, padding);
+            var actualShape = new Tuple<int, int>(y.GetLength(0), y.GetLength(1));
+            if (!actualShape.Equals(expectedShape))
+            {
+                throw new ArgumentException("Invalid size of target array, expected " + expectedShape + ", but was " + actualShape);
+            }
+            var xOffset = GetXOffset(kernel, padding);
+            ConvolutionControl.Provider.Conv2D(kernel, x, xOffset, y, actualShape);
+        }
+
+        public static <#= type #>[,] Conv2D(<#= type #>[,] kernel, <#= type #>[,] x, Padding2D padding = Padding2D.Valid)
+        {
+            var shape = GetExpectedResultShape(x, kernel, padding);
+            var y = new <#= type #>[shape.Item1, shape.Item2];
+            Conv2D(kernel, x, y, padding);
             return y;
         }
 
@@ -77,6 +102,19 @@ namespace MathNet.Numerics.Convolutions
             }
         }
 
+        private static Tuple<int, int> GetXOffset<T>(T[,] kernel, Padding2D padding)
+        {
+            switch (padding)
+            {
+                case Padding2D.Valid:
+                    return new Tuple<int, int>(kernel.GetLength(0) - 1, kernel.GetLength(1) - 1);
+                case Padding2D.Same:
+                    return new Tuple<int, int>(kernel.GetLength(0) / 2, kernel.GetLength(1) / 2);
+                default:
+                    throw new InvalidOperationException("Unsupported padding type: " + padding);
+            }
+        }
+
         private static int GetExpectedResultLength(int kernelLength, int xLength, Padding padding)
         {
             switch (padding)
@@ -88,6 +126,22 @@ namespace MathNet.Numerics.Convolutions
                     return xLength;
                 default:
                     throw new InvalidOperationException("Unsupported padding type: " + padding);
+            }
+        }
+
+        private static Tuple<int, int> GetExpectedResultShape<T>(T[,] x, T[,] kernel, Padding2D padding)
+        {
+            if (padding == Padding2D.Same)
+            {
+                return new Tuple<int, int>(x.GetLength(0), x.GetLength(1));
+            }
+            else if (padding == Padding2D.Valid)
+            {
+                return new Tuple<int, int>(x.GetLength(0) - kernel.GetLength(0) + 1, x.GetLength(1) - kernel.GetLength(1) + 1);
+            }
+            else
+            {
+                throw new ArgumentException("Unsupported padding type: " + padding);
             }
         }
 
